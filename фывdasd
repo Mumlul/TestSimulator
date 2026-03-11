@@ -1,19 +1,59 @@
-Unhandled exception. System.ArgumentException: An item with the same key has already been added. Key: ������ ������ � COM-������: �������������� � ������� ���������� �� ��������.
-   at System.Collections.Generic.Dictionary`2.TryInsert(TKey key, TValue value, InsertionBehavior behavior)
-   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
-   at Avalonia.Controls.Notifications.WindowNotificationManager.<>c__DisplayClass16_0.<Show>b__2()
-   at Avalonia.Threading.DispatcherOperation.InvokeCore()
-   at Avalonia.Threading.DispatcherOperation.Execute()
-   at Avalonia.Threading.Dispatcher.ExecuteJob(DispatcherOperation job)
-   at Avalonia.Threading.Dispatcher.ExecuteJobsCore(Boolean fromExplicitBackgroundProcessingCallback)
-   at Avalonia.Threading.Dispatcher.Signaled()
-   at Avalonia.Win32.Win32Platform.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
-   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
-   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
-   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
-   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
-   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
-   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
-   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
-   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, Action`1 lifetimeBuilder)
-   at Simulator.Program.Main(String[] args) in C:\Users\��� ����1\Desktop\AlexProjects\Simulator\Simulator\Program.cs:line 12
+using System;
+using System.IO.Ports;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Введите COM-порт (например COM3):");
+        string portName = Console.ReadLine() ?? "COM3";
+
+        Console.WriteLine("Введите скорость (baud rate, например 9600):");
+        int baudRate = int.TryParse(Console.ReadLine(), out int br) ? br : 9600;
+
+        using SerialPort comPort = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One)
+        {
+            Handshake = Handshake.None,
+            ReadTimeout = 500,
+            WriteTimeout = 500
+        };
+
+        try
+        {
+            comPort.Open();
+            Console.WriteLine($"Порт {portName} открыт. Чтение данных... (Ctrl+C для выхода)");
+
+            comPort.DataReceived += (sender, e) =>
+            {
+                try
+                {
+                    string data = comPort.ReadExisting(); // читаем все доступные данные
+                    if (!string.IsNullOrEmpty(data))
+                        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Получено: {data}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при чтении: {ex.Message}");
+                }
+            };
+
+            // Цикл, чтобы программа не завершилась
+            while (true)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Не удалось открыть COM-порт: {ex.Message}");
+        }
+        finally
+        {
+            if (comPort.IsOpen)
+            {
+                comPort.Close();
+                Console.WriteLine("COM-порт закрыт.");
+            }
+        }
+    }
+}
