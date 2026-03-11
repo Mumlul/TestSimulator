@@ -1,0 +1,14 @@
+$port = new-Object System.IO.Ports.SerialPort COM3,9600,None,8,one
+$port.Open()
+
+# Читаем данные (в цикле)
+while ($true) {
+    if ($port.BytesToRead -gt 0) {
+        $data = $port.ReadLine()
+        Write-Host $data
+    }
+    Start-Sleep -Milliseconds 100
+}
+
+# Закрыть порт
+$port.Close()
