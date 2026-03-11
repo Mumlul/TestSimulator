@@ -19,3 +19,11 @@ while ($true) {
     }
     Start-Sleep -Milliseconds 100
 }
+
+while ($true) {
+    if ($port.BytesToRead -gt 0) {
+        $data = $port.ReadLine()
+        Write-Host $data
+    }
+    Start-Sleep -Milliseconds 100
+}
