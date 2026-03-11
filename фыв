@@ -12,3 +12,10 @@ while ($true) {
 
 # Закрыть порт
 $port.Close()
+while ($true) {
+    if ($port.BytesToRead -gt 0) {
+        $data = $port.ReadLine()
+        Write-Host $data
+    }
+    Start-Sleep -Milliseconds 100
+}
