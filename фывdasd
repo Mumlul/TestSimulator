@@ -1,29 +1,19 @@
-$port = new-Object System.IO.Ports.SerialPort COM3,9600,None,8,one
-$port.Open()
-
-# Читаем данные (в цикле)
-while ($true) {
-    if ($port.BytesToRead -gt 0) {
-        $data = $port.ReadLine()
-        Write-Host $data
-    }
-    Start-Sleep -Milliseconds 100
-}
-
-# Закрыть порт
-$port.Close()
-while ($true) {
-    if ($port.BytesToRead -gt 0) {
-        $data = $port.ReadLine()
-        Write-Host $data
-    }
-    Start-Sleep -Milliseconds 100
-}
-
-while ($true) {
-    if ($port.BytesToRead -gt 0) {
-        $data = $port.ReadLine()
-        Write-Host $data
-    }
-    Start-Sleep -Milliseconds 100
-}
+Unhandled exception. System.ArgumentException: An item with the same key has already been added. Key: ������ ������ � COM-������: �������������� � ������� ���������� �� ��������.
+   at System.Collections.Generic.Dictionary`2.TryInsert(TKey key, TValue value, InsertionBehavior behavior)
+   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   at Avalonia.Controls.Notifications.WindowNotificationManager.<>c__DisplayClass16_0.<Show>b__2()
+   at Avalonia.Threading.DispatcherOperation.InvokeCore()
+   at Avalonia.Threading.DispatcherOperation.Execute()
+   at Avalonia.Threading.Dispatcher.ExecuteJob(DispatcherOperation job)
+   at Avalonia.Threading.Dispatcher.ExecuteJobsCore(Boolean fromExplicitBackgroundProcessingCallback)
+   at Avalonia.Threading.Dispatcher.Signaled()
+   at Avalonia.Win32.Win32Platform.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
+   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
+   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
+   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
+   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, Action`1 lifetimeBuilder)
+   at Simulator.Program.Main(String[] args) in C:\Users\��� ����1\Desktop\AlexProjects\Simulator\Simulator\Program.cs:line 12
